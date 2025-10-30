@@ -1,0 +1,29 @@
+
+services:
+  api:
+    build: .
+    container_name: pets-api
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    # Remove the volumes from api service unless you need them for something specific
+
+  db:
+    image: mysql:8.0.30
+    container_name: db
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: pets
+      MYSQL_USER: pets_user
+      MYSQL_PASSWORD: root
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d  # if you have init scripts
+
+volumes:
+  mysql_data:
